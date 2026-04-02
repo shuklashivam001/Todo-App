@@ -23,4 +23,22 @@ app.use(session({
     saveUninitialized: true,
 }))
 
+app.post("/login",(req,res)=>{
+    const {username} = req.body;
+    req.session.user = username;
+    res.send("user loggedin");
+})
+
+app.get("/profile",(req,res)=>{
+    if(!req.session.user){
+        return res.status(401).send("User not logged in");
+    }
+    res.send(`Welcome ${req.session.user}`);
+})
+
+app.get("/logout",(req,res)=>{
+    res.session.destroy();
+    return res.send("Logged Out");
+})
+
 module.exports = app;
